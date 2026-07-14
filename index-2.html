@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#24104f">
+  <meta name="description" content="Kaustisen kansanmusiikkijuhlien käynnissä olevat ja seuraavat esiintyjät lavoittain.">
+  <title>Kaustinen nyt</title>
+  <style>
+    :root {
+      --bg:#f5f1e9; --card:#fff; --ink:#191320; --muted:#6d6575;
+      --brand:#5d2cb2; --deep:#24104f; --live:#d62445; --gold:#ffd565;
+      --line:#ded6e7; --soft:#f0eaff; --shadow:0 14px 36px rgba(36,16,79,.11);
+    }
+    *{box-sizing:border-box}
+    html{background:var(--bg)}
+    body{margin:0;min-height:100vh;color:var(--ink);background:radial-gradient(circle at 95% 0,rgba(255,201,70,.24),transparent 30rem),linear-gradient(#faf7f1,var(--bg));font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    button,a{font:inherit} button{cursor:pointer}
+    main{width:min(1180px,calc(100% - 28px));margin:auto;padding:24px 0 max(44px,env(safe-area-inset-bottom))}
+    .hero{position:relative;display:flex;justify-content:space-between;align-items:flex-end;gap:22px;padding:27px;border-radius:26px;color:#fff;background:linear-gradient(135deg,var(--brand),var(--deep));box-shadow:var(--shadow);overflow:hidden}
+    .hero:after{content:"";position:absolute;right:-75px;top:-105px;width:270px;height:270px;border:46px solid rgba(255,255,255,.08);border-radius:50%}
+    .hero>*,.toolbar>*{position:relative;z-index:1}
+    .eyebrow{margin:0 0 8px;color:var(--gold);font-weight:900;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase}
+    h1{margin:0;font-size:clamp(2.1rem,6vw,4.6rem);line-height:.96;letter-spacing:-.055em}
+    .hero-time{margin:14px 0 0;font-weight:750;color:#eee7ff}
+    .refresh{flex:none;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.13);color:#fff;border-radius:999px;padding:11px 15px;font-weight:850}
+    .refresh:disabled{opacity:.55;cursor:wait}.refresh.is-loading span{display:inline-block;animation:spin .9s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+    .toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:18px 0 12px;padding:10px;background:rgba(255,255,255,.72);border:1px solid rgba(222,214,231,.8);border-radius:18px;backdrop-filter:blur(10px)}
+    .filter{border:0;border-radius:999px;padding:10px 14px;background:transparent;color:var(--muted);font-weight:850}
+    .filter.active{background:var(--deep);color:#fff}.count{margin-left:auto;padding:0 8px;color:var(--muted);font-size:.92rem;font-weight:750}
+    .status{min-height:24px;margin:8px 3px 14px;color:var(--muted);font-size:.93rem}.status.error{color:#a01631;font-weight:750}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:15px}
+    .stage{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 8px 24px rgba(36,16,79,.065)}
+    .stage-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}.stage h2{margin:0;font-size:1.18rem;letter-spacing:-.02em}
+    .badge{flex:none;border-radius:999px;padding:5px 9px;font-size:.72rem;font-weight:950;letter-spacing:.06em;text-transform:uppercase}.badge.live{background:#ffe3e8;color:#ae1431}.badge.next{background:var(--soft);color:var(--brand)}
+    .event{border-radius:16px;padding:14px;background:#f8f6fa}.event.live{background:linear-gradient(135deg,#fff0f3,#fff)}.event+.event{margin-top:10px}
+    .label{display:flex;align-items:center;gap:7px;margin:0 0 7px;color:var(--muted);font-size:.76rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.dot{width:8px;height:8px;border-radius:50%;background:var(--brand)}.event.live .dot{background:var(--live);box-shadow:0 0 0 5px rgba(214,36,69,.12)}
+    .title{margin:0;font-size:1.08rem;font-weight:900;line-height:1.26}.time{display:flex;justify-content:space-between;gap:10px;margin-top:9px;color:var(--muted);font-size:.9rem;font-weight:750}.time strong{color:var(--ink)}
+    .empty,.loading{padding:42px 20px;text-align:center;background:rgba(255,255,255,.74);border:1px dashed #cfc4db;border-radius:22px}.empty h2,.loading h2{margin:0 0 8px}.empty p,.loading p{margin:0;color:var(--muted)}
+    .skeleton{height:180px;border-radius:22px;background:linear-gradient(90deg,#eee9f1 25%,#f8f5fa 40%,#eee9f1 60%);background-size:300% 100%;animation:shine 1.3s infinite}@keyframes shine{to{background-position:-100% 0}}
+    footer{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-top:24px;padding:0 5px;color:var(--muted);font-size:.88rem}footer p{margin:0}footer a{color:var(--brand);font-weight:800;text-decoration:none}
+    @media(max-width:640px){main{width:min(100% - 18px,1180px);padding-top:9px}.hero{align-items:flex-start;padding:21px;border-radius:21px}.refresh{padding:9px 12px}.toolbar{position:sticky;top:7px;z-index:10}.count{width:100%;margin-left:3px}.stage{border-radius:19px;padding:15px}}
+  </style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Kaustinen Folk Music Festival 2026</p>
+      <h1>Mitä lavoilla tapahtuu nyt?</h1>
+      <p class="hero-time" id="clock">Ladataan aikaa…</p>
+    </div>
+    <button class="refresh" id="refresh" type="button"><span aria-hidden="true">↻</span> Päivitä</button>
+  </header>
+
+  <nav class="toolbar" aria-label="Aikataulun suodatus">
+    <button class="filter active" id="show-all" type="button">Nyt + seuraavat</button>
+    <button class="filter" id="show-live" type="button">Vain käynnissä</button>
+    <span class="count" id="count"></span>
+  </nav>
+
+  <p class="status" id="status" role="status"></p>
+  <section id="content" aria-live="polite">
+    <div class="grid"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+  </section>
+
+  <footer>
+    <p id="source-info">Aikataulu ladataan suoraan Kaustisen omalta sivustolta ja tallennetaan selaimeen.</p>
+    <a href="https://kaustinen.net/aikataulu-2026/" target="_blank" rel="noreferrer">Virallinen aikataulu ↗</a>
+  </footer>
+</main>
+
+<script>
+"use strict";
+
+const TIME_ZONE = "Europe/Helsinki";
+const CACHE_KEY = "kaustinen-nyt-2026-jsonp-v1";
+const FESTIVAL_YEAR = 2026;
+const MIN_VALID_EVENTS = 100;
+const API_BASE = "https://kaustinen.net/wp-json/wp/v2/pages";
+const TIME_EXACT = /^(?:[01]?\d|2[0-3])[.:][0-5]\d\s*[-–—]\s*(?:[01]?\d|2[0-3])[.:][0-5]\d$/;
+const TIME_ANY = /(?:[01]?\d|2[0-3])[.:][0-5]\d\s*[-–—]\s*(?:[01]?\d|2[0-3])[.:][0-5]\d/;
+const DAY_RE = /^(maanantai|tiistai|keskiviikko|torstai|perjantai|lauantai|sunnuntai|ma|ti|ke|to|pe|la|su)\s+(\d{1,2})\.(\d{1,2})\.?$/i;
+const DAY_NAMES = {ma:"maanantai",maanantai:"maanantai",ti:"tiistai",tiistai:"tiistai",ke:"keskiviikko",keskiviikko:"keskiviikko",to:"torstai",torstai:"torstai",pe:"perjantai",perjantai:"perjantai",la:"lauantai",lauantai:"lauantai",su:"sunnuntai",sunnuntai:"sunnuntai"};
+const SKIP_RE = /^(aikataulu 2026|muutokset mahdollisia|kaustislainen esiintyjä|maakuntateema|lasten kaustinen|elävä perintö|siirtolaisuus|ma 13\.07\.|ti 14\.07\.|ke 15\.07\.|to 16\.07\.|pe 17\.07\.|la 18\.07\.|su 19\.07\.)$/i;
+
+const state = {events:[], onlyLive:false, loading:false, source:"", loadedAt:null};
+const el = id => document.getElementById(id);
+const content = el("content"), statusEl = el("status"), countEl = el("count"), refreshBtn = el("refresh"), sourceInfo = el("source-info");
+
+function clean(value){return String(value||"").replace(/\u00a0/g," ").replace(/[ \t]+/g," ").trim()}
+function esc(value){return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function parseClock(s){const [h,m]=s.split(/[.:]/).map(Number);return {h,m,minutes:h*60+m}}
+function splitRange(s){const [start,end]=s.split(/[-–—]/).map(clean);return {start,end}}
+function addDays(dateString,days){const [y,m,d]=dateString.split("-").map(Number);const x=new Date(Date.UTC(y,m-1,d+days));return `${x.getUTCFullYear()}-${String(x.getUTCMonth()+1).padStart(2,"0")}-${String(x.getUTCDate()).padStart(2,"0")}`}
+function makeIso(date,clock){const {h,m}=parseClock(clock);return `${date}T${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:00+03:00`}
+
+function makeEvent(day,date,stage,title,timeText,seen){
+  const {start,end}=splitRange(timeText); const s=parseClock(start), e=parseClock(end);
+  const startOffset=s.minutes<360?1:0;
+  let startDate=addDays(date,startOffset), endDate=addDays(date,e.minutes<360?1:0);
+  let startIso=makeIso(startDate,start), endIso=makeIso(endDate,end);
+  while(Date.parse(endIso)<=Date.parse(startIso)){endDate=addDays(endDate,1);endIso=makeIso(endDate,end)}
+  const id=`${date}|${stage}|${start}|${title}`.toLocaleLowerCase("fi-FI");
+  if(seen.has(id))return null; seen.add(id);
+  return {id,day,date,stage,title,start:start.replace(":","."),end:end.replace(":","."),startIso,endIso};
+}
+
+function usefulTitle(s,stage){return !!(s&&s!==stage&&s.length<=260&&!TIME_ANY.test(s)&&!SKIP_RE.test(s)&&!/^https?:/i.test(s))}
+
+function parseScheduleHtml(html){
+  const doc=new DOMParser().parseFromString(html,"text/html");
+  const blocks=[...doc.body.querySelectorAll("h1,h2,h3,h4,h5,h6,p,li")];
+  const events=[], seen=new Set();
+  let day="", date="", stage="", pending="", started=false;
+
+  for(const node of blocks){
+    const text=clean(node.textContent); if(!text)continue;
+    const isHeading=/^H[1-6]$/.test(node.tagName);
+    if(/^aikataulu 2026$/i.test(text)){started=true;pending="";continue}
+    const dm=text.match(DAY_RE);
+    if(dm){
+      started=true; day=DAY_NAMES[dm[1].toLowerCase()]||dm[1].toLowerCase();
+      date=`${FESTIVAL_YEAR}-${String(Number(dm[3])).padStart(2,"0")}-${String(Number(dm[2])).padStart(2,"0")}`;
+      stage="";pending="";continue;
+    }
+    if(!started||!date)continue;
+    if(isHeading&&!SKIP_RE.test(text)){
+      stage=text;pending="";continue;
+    }
+    if(!stage)continue;
+
+    const match=text.match(TIME_ANY);
+    if(match){
+      const before=clean(text.slice(0,match.index));
+      const title=usefulTitle(before,stage)?before:pending;
+      if(usefulTitle(title,stage)){
+        const event=makeEvent(day,date,stage,title,match[0],seen);if(event)events.push(event)
+      }
+      pending="";continue;
+    }
+    if(usefulTitle(text,stage))pending=text;
+  }
+  return events.sort((a,b)=>Date.parse(a.startIso)-Date.parse(b.startIso));
+}
+
+function jsonp(url,timeout=18000){
+  return new Promise((resolve,reject)=>{
+    const callback=`__kaustinen_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const script=document.createElement("script"); let done=false;
+    const finish=(fn,value)=>{if(done)return;done=true;clearTimeout(timer);script.remove();try{delete window[callback]}catch{}fn(value)};
+    window[callback]=data=>finish(resolve,data);
+    script.onerror=()=>finish(reject,new Error("Kaustisen rajapintaan ei saatu yhteyttä."));
+    const join=url.includes("?")?"&":"?";
+    script.src=`${url}${join}_jsonp=${encodeURIComponent(callback)}&_=${Date.now()}`;
+    const timer=setTimeout(()=>finish(reject,new Error("Aikataulun lataus aikakatkaistiin.")),timeout);
+    document.head.appendChild(script);
+  })
+}
+
+async function loadFromKaustinen(){
+  const fields=encodeURIComponent("content,modified,slug,title");
+  const urls=[
+    `${API_BASE}?slug=aikataulu-2026&per_page=1&_fields=${fields}`,
+    `${API_BASE}?search=${encodeURIComponent("Aikataulu 2026")}&per_page=20&_fields=${fields}`,
+    `https://kaustinen.net/?rest_route=${encodeURIComponent("/wp/v2/pages")}&slug=aikataulu-2026&per_page=1&_fields=${fields}`
+  ];
+  let lastError;
+  for(const url of urls){
+    try{
+      const payload=await jsonp(url); const pages=Array.isArray(payload)?payload:[];
+      for(const page of pages){
+        const html=page&&page.content&&page.content.rendered;
+        if(!html)continue;
+        const events=parseScheduleHtml(html);
+        if(events.length>=MIN_VALID_EVENTS)return {events,modified:page.modified||null};
+        lastError=new Error(`Rajapinnasta löytyi vain ${events.length} esitystä.`);
+      }
+    }catch(err){lastError=err}
+  }
+  throw lastError||new Error("Aikataulusivun sisältöä ei löytynyt.");
+}
+
+function saveCache(events,modified){
+  try{localStorage.setItem(CACHE_KEY,JSON.stringify({events,modified,savedAt:new Date().toISOString()}))}catch{}
+}
+function readCache(){
+  try{const x=JSON.parse(localStorage.getItem(CACHE_KEY)||"null");return x&&Array.isArray(x.events)&&x.events.length>=MIN_VALID_EVENTS?x:null}catch{return null}
+}
+
+function nowForView(){
+  const p=new URLSearchParams(location.search).get("aika");
+  if(p){const normalized=/[zZ]|[+-]\d\d:\d\d$/.test(p)?p:`${p}:00+03:00`;const d=new Date(normalized);if(!isNaN(d))return d}
+  return new Date();
+}
+function formatNow(d){return new Intl.DateTimeFormat("fi-FI",{timeZone:TIME_ZONE,weekday:"long",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit",second:"2-digit"}).format(d)}
+function formatClock(iso){return new Intl.DateTimeFormat("fi-FI",{timeZone:TIME_ZONE,hour:"2-digit",minute:"2-digit"}).format(new Date(iso))}
+function formatDay(iso){return new Intl.DateTimeFormat("fi-FI",{timeZone:TIME_ZONE,weekday:"short",day:"numeric",month:"numeric"}).format(new Date(iso))}
+function minutesUntil(iso,now){return Math.max(0,Math.ceil((Date.parse(iso)-now.getTime())/60000))}
+
+function choose(events,now){
+  const t=now.getTime(), stages=[...new Set(events.map(e=>e.stage))];
+  return stages.map(stage=>{
+    const list=events.filter(e=>e.stage===stage).sort((a,b)=>Date.parse(a.startIso)-Date.parse(b.startIso));
+    const current=list.find(e=>Date.parse(e.startIso)<=t&&t<Date.parse(e.endIso))||null;
+    const next=list.find(e=>Date.parse(e.startIso)>t)||null;
+    return {stage,current,next};
+  }).filter(x=>x.current||x.next).sort((a,b)=>{
+    if(a.current&&!b.current)return -1;if(!a.current&&b.current)return 1;
+    return Date.parse((a.current||a.next).startIso)-Date.parse((b.current||b.next).startIso)||a.stage.localeCompare(b.stage,"fi");
+  })
+}
+
+function eventCard(event,type,now){
+  const live=type==="live";
+  const left=live?Math.max(0,Math.ceil((Date.parse(event.endIso)-now.getTime())/60000)):minutesUntil(event.startIso,now);
+  const day=formatDay(event.startIso); const todayDay=formatDay(now);
+  return `<div class="event ${live?"live":""}">
+    <p class="label"><span class="dot"></span>${live?"Käynnissä":"Seuraavaksi"}</p>
+    <p class="title">${esc(event.title)}</p>
+    <div class="time"><strong>${day!==todayDay?`${esc(day)} · `:""}${esc(formatClock(event.startIso))}–${esc(formatClock(event.endIso))}</strong><span>${live?`jäljellä noin ${left} min`:left<60?`alkaa ${left} min päästä`:""}</span></div>
+  </div>`
+}
+
+function render(){
+  const now=nowForView(); el("clock").textContent=formatNow(now);
+  if(!state.events.length)return;
+  const all=choose(state.events,now); const shown=state.onlyLive?all.filter(x=>x.current):all;
+  countEl.textContent=state.onlyLive?`${shown.length} käynnissä`:`${all.length} lavaa`;
+  if(!shown.length){
+    const festivalEnd=Math.max(...state.events.map(e=>Date.parse(e.endIso)));
+    content.innerHTML=`<div class="empty"><h2>${now.getTime()>festivalEnd?"Festivaaliohjelma on päättynyt":"Juuri nyt ei ole käynnissä olevia esityksiä"}</h2><p>${state.onlyLive?"Valitse “Nyt + seuraavat”, niin näet seuraavaksi alkavat esitykset.":"Tarkista aika tai virallinen aikataulu."}</p></div>`;return;
+  }
+  content.innerHTML=`<div class="grid">${shown.map(item=>`<article class="stage"><div class="stage-head"><h2>${esc(item.stage)}</h2><span class="badge ${item.current?"live":"next"}">${item.current?"Nyt":"Seuraava"}</span></div>${item.current?eventCard(item.current,"live",now):""}${!state.onlyLive&&item.next?eventCard(item.next,"next",now):""}</article>`).join("")}</div>`;
+}
+
+async function load(force=false){
+  if(state.loading)return;state.loading=true;refreshBtn.disabled=true;refreshBtn.classList.add("is-loading");statusEl.className="status";statusEl.textContent="Haetaan virallista aikataulua Kaustisen sivustolta…";
+  if(!force){const cached=readCache();if(cached){state.events=cached.events;state.source="selaimeen tallennettu aikataulu";state.loadedAt=new Date(cached.savedAt);render();statusEl.textContent=`Näytetään tallennettu aikataulu (${cached.events.length} esitystä). Tarkistetaan samalla lähde…`;}}
+  try{
+    const result=await loadFromKaustinen();state.events=result.events;state.source="Kaustinen.net";state.loadedAt=new Date();saveCache(result.events,result.modified);render();
+    statusEl.textContent=`Aikataulu ladattu: ${result.events.length} esitystä, ${new Set(result.events.map(e=>e.stage)).size} lavaa.`;
+    sourceInfo.textContent="Aikataulu luetaan suoraan Kaustisen omalta sivustolta ja säilytetään selaimessa varmuuskopiona.";
+  }catch(err){
+    if(state.events.length){statusEl.textContent="Kaustisen sivustoon ei juuri nyt saatu yhteyttä. Käytetään selaimeen tallennettua aikataulua.";}
+    else{statusEl.className="status error";statusEl.textContent="Aikataulua ei saatu ladattua: "+(err&&err.message?err.message:"tuntematon virhe");content.innerHTML='<div class="empty"><h2>Aikataulua ei voitu avata</h2><p>Paina Päivitä. Sivun pitää olla verkkoyhteydessä ensimmäisellä avauskerralla.</p></div>';}
+  }finally{state.loading=false;refreshBtn.disabled=false;refreshBtn.classList.remove("is-loading")}
+}
+
+el("show-all").onclick=()=>{state.onlyLive=false;el("show-all").classList.add("active");el("show-live").classList.remove("active");render()};
+el("show-live").onclick=()=>{state.onlyLive=true;el("show-live").classList.add("active");el("show-all").classList.remove("active");render()};
+refreshBtn.onclick=()=>load(true);
+setInterval(render,15000);
+load(false);
+</script>
+</body>
+</html>
